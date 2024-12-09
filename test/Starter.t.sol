@@ -18,7 +18,11 @@ contract StarterTest is Test {
     }
 
     function testVerifyProof() public view {
-        bytes memory proof = vm.readFileBinary("./circuits/target/proof-clean");
+        bytes memory proof = vm.readFileBinary(
+            "./circuits/target/proof-clean"
+        );
+
+        // bytes memory proof = abi.encodePacked(proofHex);
 
         console.logBytes(proof);
 
