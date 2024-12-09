@@ -2,28 +2,62 @@ import { UltraHonkBackend, splitHonkProof } from "@aztec/bb.js";
 import fs from "fs";
 import circuit from "../circuits/target/noir_solidity.json";
 
+const NUMBER_OF_FIELDS_IN_HONK_PROOF = 447;
+
+
+const readPublicInputs = (proofAsFields: any) => {
+  const publicInputs = [];
+  // Compute the number of public inputs, not accounted  for in the constant NUMBER_OF_FIELDS_IN_PROOF
+  const numPublicInputs = proofAsFields.length - NUMBER_OF_FIELDS_IN_HONK_PROOF;
+  let publicInputsOffset = 3;
+
+  for (let i = 0; i < numPublicInputs; i++) {
+    publicInputs.push(proofAsFields[publicInputsOffset + i]);
+  }
+  return [numPublicInputs, publicInputs];
+};
+
 
 (async () => {
   const proofW = fs.readFileSync("../circuits/target/proof");
+  const proofAsFields = fs.readFileSync("../circuits/target/proof_fields.json");
 
-  const { proof, publicInputs } = splitHonkProof(new Uint8Array(proofW));
-  console.log("proof:", proof);
+  // const { proof, publicInputs } = splitHonkProof(new Uint8Array(proofW));
+  // console.log("proof:", proof);
+  // console.log("publicInputs:", publicInputs);
+
+  // const honk = new UltraHonkBackend(circuit.bytecode);
+
+  // const verified = await honk.verifyProof({ proof, publicInputs: deflattenFields(publicInputs) });
+
+  // console.log("verified:", verified);
+
+ 
+
+  const [numPublicInputs, publicInputs] = readPublicInputs(
+    JSON.parse(proofAsFields.toString())
+  );
+
+  console.log("numPublicInputs:", numPublicInputs);
   console.log("publicInputs:", publicInputs);
 
-  const honk = new UltraHonkBackend(circuit.bytecode);
+  // Cut the number of public inputs out of the proof string
+  let proofStr = proofW.toString("hex");
+  // Cut off the serialised buffer size at start
+  proofStr = proofStr.substring(8);
+  // Get the part before and after the public inputs
+  const proofStart = proofStr.slice(0, 64 * 3);
+  const proofEnd = proofStr.substring(64 * 3 + 64 * (numPublicInputs as number));
+  proofStr = proofStart + proofEnd;
 
-  const verified = await honk.verifyProof({ proof, publicInputs: deflattenFields(publicInputs) });
+  proofStr = "0x" + proofStr;
 
-  console.log("verified:", verified);
-
-  fs.writeFileSync("../circuits/target/proof-clean", "0x" + proofW.toString("hex"));
+  fs.writeFileSync("../circuits/target/proof-clean",proofStr);
   console.log("Proof written to ../circuits/target/proof-clean");
+
+  fs.writeFileSync("../circuits/target/public-inputs", JSON.stringify(publicInputs));
+  console.log("Public inputs written to ../circuits/target/public-inputs");
 })();
-
-
-
-
-
 
 // taken from @aztec/bb.js/proof
 function uint8ArrayToHex(buffer: Uint8Array): string {
@@ -32,12 +66,12 @@ function uint8ArrayToHex(buffer: Uint8Array): string {
   buffer.forEach(function (i) {
     let h = i.toString(16);
     if (h.length % 2) {
-      h = '0' + h;
+      h = "0" + h;
     }
     hex.push(h);
   });
 
-  return '0x' + hex.join('');
+  return "0x" + hex.join("");
 }
 
 export function deflattenFields(flattenedFields: Uint8Array): string[] {
@@ -51,4 +85,3 @@ export function deflattenFields(flattenedFields: Uint8Array): string[] {
 
   return chunkedFlattenedPublicInputs.map(uint8ArrayToHex);
 }
-
