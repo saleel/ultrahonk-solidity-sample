@@ -17,7 +17,7 @@ contract StarterTest is Test {
         publicInputs[0] = bytes32(0x0000000000000000000000000000000000000000000000000000000000000003);
     }
 
-    function testVerifyProof() public view {
+    function testVerifyProof() public {
         bytes memory proof = vm.readFileBinary(
             "./circuits/target/proof-clean"
         );
