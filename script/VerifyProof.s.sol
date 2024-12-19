@@ -25,4 +25,16 @@ contract VerifyProofScript is Script {
 
         vm.stopBroadcast();
     }
-} 
+}
+
+
+contract GetVerifiedCount is Script {
+    function setUp() public {}
+
+    function run() public {
+        Starter starter = Starter(vm.envAddress("STARTER_ADDRESS"));
+        console2.log("Using starter at:", address(starter));
+
+        console2.log("verified count", starter.getVerifiedCount());
+    }
+}
