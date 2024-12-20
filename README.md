@@ -19,7 +19,7 @@ This is a simple smart contract that verifies a honk proof with one public input
 
 # foundry test to verify
 git submodule update
-forge test --optimize --optimizer-runs 5000 --evm-version cancun --gas-report -vvv
+forge test --optimize --optimizer-runs 5000 --gas-report -vvv
 
 ```
 
