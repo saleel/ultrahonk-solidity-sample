@@ -22,6 +22,7 @@ contract StarterTest is Test {
             "./circuits/target/proof-clean"
         );
 
+        console.log("Proof length:", proof.length);
         starter.verifyEqual(proof, publicInputs);
     }
 }

@@ -7,19 +7,16 @@ This is a simple smart contract that verifies a honk proof with one public input
 ### Running locally
 
 ```ssh
-# nargo 0.38.0
-# bb 0.61.0
+git submodule update
 
 # Build circuits, generate verifier contract
 (cd circuits && ./build.sh)
 
-# Use JS to extract proof from "proof+pubInputs"
-(cd js && npm install)
-(cd js && ts-node split-proof.ts)
+# Use JS to generate proof and save to a file
+(cd js && npm install && npx ts-node generate-proof.ts)
 
-# foundry test to verify
-git submodule update
-forge test --optimize --optimizer-runs 5000 --gas-report -vvv
+# foundry test read generated proof and verify
+(cd contract && forge test --optimize --optimizer-runs 5000 --gas-report -vvv)
 
 ```
 
