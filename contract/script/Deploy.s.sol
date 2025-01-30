@@ -2,8 +2,8 @@
 pragma solidity ^0.8.13;
 
 import {Script, console2} from "forge-std/Script.sol";
-import {Starter} from "../contract/Starter.sol";
-import {HonkVerifier} from "../circuits/target/Verifier.sol";
+import {Starter} from "../Starter.sol";
+import {HonkVerifier} from "../Verifier.sol";
 
 contract DeployScript is Script {
     function setUp() public {}

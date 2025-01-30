@@ -1,9 +1,9 @@
 pragma solidity ^0.8.17;
 
 import "forge-std/Test.sol";
-import "../contract/Starter.sol";
-import "../circuits/target/Verifier.sol";
 import "forge-std/console.sol";
+import "../Starter.sol";
+import "../Verifier.sol";
 
 contract StarterTest is Test {
     Starter public starter;
@@ -19,7 +19,7 @@ contract StarterTest is Test {
 
     function testVerifyProof() public {
         bytes memory proof = vm.readFileBinary(
-            "./circuits/target/proof-clean"
+            "../circuits/target/proof-clean"
         );
 
         console.log("Proof length:", proof.length);
