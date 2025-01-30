@@ -20,7 +20,7 @@ const readPublicInputs = (proofAsFields: any) => {
 
 (async () => {
   const proofW = fs.readFileSync("../circuits/target/proof");
-  const proofAsFields = fs.readFileSync("../circuits/target/proof_fields.json");
+  // const proofAsFields = fs.readFileSync("../circuits/target/proof_fields.json");
 
   // const { proof } = splitHonkProof(new Uint8Array(proofW));
   // console.log("proof:", proof);
@@ -34,22 +34,23 @@ const readPublicInputs = (proofAsFields: any) => {
 
  
 
-  const [numPublicInputs, publicInputs] = readPublicInputs(
-    JSON.parse(proofAsFields.toString())
-  );
+  // const [numPublicInputs, publicInputs] = readPublicInputs(
+  //   JSON.parse(proofAsFields.toString())
+  // );
 
   // const numPublicInputs = 1;
 
-  console.log("numPublicInputs:", numPublicInputs);
+  // console.log("numPublicInputs:", numPublicInputs);
   // console.log("publicInputs:", publicInputs);
 
   // Cut the number of public inputs out of the proof string
   let proofStr = proofW.toString("hex");
+  console.log(proofStr.length)
   // Cut off the serialised buffer size at start
   proofStr = proofStr.substring(8);
   // Get the part before and after the public inputs
   const proofStart = proofStr.slice(0, 64 * 3);
-  const proofEnd = proofStr.substring(64 * 3 + 64 * (numPublicInputs as number));
+  const proofEnd = proofStr.substring(64 * 3 + 64 * (1 as number));
   proofStr = proofStart + proofEnd;
 
   // proofStr = "0x" + proofStr;
@@ -58,8 +59,8 @@ const readPublicInputs = (proofAsFields: any) => {
   fs.writeFileSync("../circuits/target/proof-clean", Buffer.from(proofStr, "hex"));
   console.log("Proof written to ../circuits/target/proof-clean");
 
-  fs.writeFileSync("../circuits/target/public-inputs", JSON.stringify(publicInputs));
-  console.log("Public inputs written to ../circuits/target/public-inputs");
+  // fs.writeFileSync("../circuits/target/public-inputs", JSON.stringify(1));
+  // console.log("Public inputs written to ../circuits/target/public-inputs");
 })();
 
 // taken from @aztec/bb.js/proof
