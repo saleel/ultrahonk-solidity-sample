@@ -14,10 +14,8 @@ import { Noir } from "@noir-lang/noir_js";
     const { witness } = await noir.execute(inputs);
     const { proof, publicInputs } = await honk.generateProof(witness, { keccak: true });
 
-    const cleanProof = proof.slice(4); // remove first 4 bytes (buffer size)
-
     // save proof to file
-    fs.writeFileSync("../circuits/target/proof-clean", cleanProof);
+    fs.writeFileSync("../circuits/target/proof", proof);
 
     // not really needed as we harcode the public input in the contract test
     fs.writeFileSync("../circuits/target/public-inputs", JSON.stringify(publicInputs));

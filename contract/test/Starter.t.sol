@@ -19,7 +19,7 @@ contract StarterTest is Test {
 
     function testVerifyProof() public {
         bytes memory proof = vm.readFileBinary(
-            "../circuits/target/proof-clean"
+            "../circuits/target/proof"
         );
 
         console.log("Proof length:", proof.length);

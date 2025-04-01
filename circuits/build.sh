@@ -7,9 +7,9 @@ if ! nargo compile; then
 fi
 
 echo "Generating vkey..."
-bb write_vk_ultra_keccak_honk -b ./target/noir_solidity.json -o ./target/vk -c ~/.bb-crs
+bb write_vk --oracle_hash keccak -b ./target/noir_solidity.json -o ./target
 
 echo "Generating solidity verifier..."
-bb contract_ultra_honk -k ./target/vk -c ~/.bb-crs -o ../contract/Verifier.sol
+bb write_solidity_verifier -k ./target/vk -o ../contract/Verifier.sol
 
 echo "Done"
