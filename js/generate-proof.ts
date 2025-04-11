@@ -19,7 +19,12 @@ import { Noir } from "@noir-lang/noir_js";
 
     // not really needed as we harcode the public input in the contract test
     fs.writeFileSync("../circuits/target/public-inputs", JSON.stringify(publicInputs));
+
+    console.log("Proof generated successfully");
+
+    process.exit(0);
   } catch (error) {
     console.error(error);
+    process.exit(1);
   }
 })();
